@@ -110,8 +110,10 @@ class FOSElasticaExtension extends Extension
             $indexName = isset($index['index_name']) ? $index['index_name'] : $name;
             $indexDefArgs = array($indexName);
             $indexDef = new Definition('%fos_elastica.index.class%', $indexDefArgs);
-            $indexDef->setFactoryService($clientId);
-            $indexDef->setFactoryMethod('getIndex');
+            $indexDef->setFactory(array(
+                $clientId,
+                'getIndex'
+            ));
             $container->setDefinition($indexId, $indexDef);
             $typePrototypeConfig = isset($index['type_prototype']) ? $index['type_prototype'] : array();
             $indexIds[$name] = $indexId;
@@ -176,8 +178,10 @@ class FOSElasticaExtension extends Extension
             $typeId = sprintf('%s.%s', $indexId, $name);
             $typeDefArgs = array($name);
             $typeDef = new Definition('%fos_elastica.type.class%', $typeDefArgs);
-            $typeDef->setFactoryService($indexId);
-            $typeDef->setFactoryMethod('getType');
+            $typeDef->setFactory(array(
+                $indexId,
+                'getType'
+            ));
             $container->setDefinition($typeId, $typeDef);
             if (isset($type['_source'])) {
                 $this->indexConfigs[$indexName]['config']['mappings'][$name]['_source'] = $type['_source'];
