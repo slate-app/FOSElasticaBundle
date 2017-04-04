@@ -111,7 +111,7 @@ class FOSElasticaExtension extends Extension
             $indexDefArgs = array($indexName);
             $indexDef = new Definition('%fos_elastica.index.class%', $indexDefArgs);
             $indexDef->setFactory(array(
-                $clientId,
+                new Reference($clientId),
                 'getIndex'
             ));
             $container->setDefinition($indexId, $indexDef);
@@ -179,7 +179,7 @@ class FOSElasticaExtension extends Extension
             $typeDefArgs = array($name);
             $typeDef = new Definition('%fos_elastica.type.class%', $typeDefArgs);
             $typeDef->setFactory(array(
-                $indexId,
+                new Reference($indexId),
                 'getType'
             ));
             $container->setDefinition($typeId, $typeDef);
